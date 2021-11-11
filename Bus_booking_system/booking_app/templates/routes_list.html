@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="right_col" role="main">
+            <div class="">
+              <div class="row">
+                <div class="col-md-12 col-sm-12 col-xs-12">
+                  <div class="x_panel">
+                    <div class="x_title">
+                      <h2 class="text-center"> Направления </h2>
+                      <div class="clearfix"></div>
+                    </div>
+                    <div class="x_content">
+                      <table id="route-datatable" class="table table-striped table-bordered">
+                        <thead>
+                          <tr>
+                            <th>От куда</th>
+                            <th>Куда</th>
+                            <th class="text-center">Дополнительная информация</th>
+                          </tr>
+                        </thead>
+
+                        <tbody>
+                            {% for object in object_list%}
+                                <tr>
+                                    <td>{{ object.name_start }}</td>
+                                    <td>{{ object.name_finish }}</td>
+                                    <td  class="text-center">
+                                            <a href={{ object.get_absolute_url }} class="btn btn-info btn-xs"> <i class="fa fa-pencil"></i> Информация </a>
+
+                                    </td>
+                                  </tr>
+                            {% endfor %}
+                        </tbody>
+                      </table>
+
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+          </div>
+{% endblock content%}
