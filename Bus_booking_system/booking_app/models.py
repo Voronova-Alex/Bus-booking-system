@@ -110,4 +110,4 @@ class RoutesTravelDatesTimes(models.Model):
         verbose_name_plural = 'Отправления'
 
     def __str__(self):
-        return f'{self.rout} дата {self.travel_date} время {self.travel_time}'
+        return f'дата {self.travel_date} время {self.travel_time}'

@@ -22,6 +22,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('booking_app.urls')),
     path('', include('accounts.urls')),
+    path('', include('booking_bus.urls')),
 
 ]
 if settings.DEBUG:

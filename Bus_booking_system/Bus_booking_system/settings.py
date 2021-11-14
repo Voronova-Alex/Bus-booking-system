@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'crispy_forms',
     'accounts',
     'six',
+    'booking_bus',
 ]
 
 MIDDLEWARE = [
