@@ -1,13 +1,13 @@
 {% extends 'base.html' %}
 
-{% block title %}Sign Page{% endblock title %}
+{% block title %}Авторизироваться{% endblock title %}
 
 {% block content %} 
     <h2>Sign Page</h2>
     <form method="post">
         {% csrf_token %}
         {{ form.as_p }}
-        <button type="submit">Register</button>
+        <button type="submit">Заргестрироваться</button>
         <br><br>
         <a href="{% url 'home-page' %}">Home</a>
     </form>

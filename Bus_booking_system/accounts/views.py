@@ -67,7 +67,7 @@ class ActivateAccount(View):
             messages.warning(request, ('Ссылка для подтверждения недействительна, возможно, потому, что она уже использовалась.'))
             return redirect('home')
 
-# Edit Profile View
+
 class ProfileView(UpdateView):
     model = User
     form_class = ProfileForm

@@ -3,14 +3,16 @@
 {% block title %}Home Page{% endblock title %}
 
 {% block content %}
-    <h2>Home</h2>
+    <h2>Информация о пользователе</h2>
     {% if user.is_authenticated %}
-    <p>You are welcome on Home Page</p>
-    <p>Your name is - {{user.first_name}} {{user.last_name}}</p>
-    <p>Your email is - {{user.email}}</p>
+    <p>Привет</p>
+    <p>{{user.first_name}} {{user.last_name}}</p>
+    <p>Твой email - {{user.email}}</p>
+    <a href="{% url 'profile' user.pk %}">Изменить информацию</a>
+
     <br><br>
-    <a href="{% url 'logout' %}">Logout</a>
+    <a href="{% url 'logout' %}">Выйти</a>
     {% else %}
-    <a href="{% url 'login' %}">Login</a>
+    <a href="{% url 'login' %}">Войти</a>
     {% endif %}
 {% endblock content %}
