@@ -2,6 +2,7 @@ from django.db import models
 from booking_app.models import RoutesTravelDatesTimes, Rout, BusStop
 from django.contrib.auth.models import User
 from datetime import timedelta, datetime
+from django.utils import timezone
 
 
 class NewTrip(models.Model):
@@ -17,12 +18,12 @@ class NewTrip(models.Model):
     PAID_STATUSES = ((PAID_BY_CARD, 'Card'),
                      (PAID_BY_CASH, 'Cash'),)
 
-
-    user = models.ForeignKey(User,  verbose_name="Имя", on_delete=models.CASCADE, null=True, blank=True)
+    user = models.CharField(max_length=50, verbose_name="Имя", default="User")
     phone = models.CharField(max_length=50, verbose_name="Контактный телефон")
-    rout_trip = models.ForeignKey(Rout, verbose_name="Направление", on_delete=models.CASCADE)
-    rout_data_time = models.ForeignKey(RoutesTravelDatesTimes, verbose_name="Дата-Время поездки",  related_name='items', on_delete=models.CASCADE, )
-    bus_stop = models.ForeignKey(BusStop, verbose_name="Остановка посадки", on_delete=models.CASCADE, null=True, blank=True)
+    rout_trip = models.CharField(max_length=50, verbose_name="Направление")
+    rout_data_time = models.ForeignKey(RoutesTravelDatesTimes, verbose_name="Дата-Время поездки", on_delete=models.CASCADE, )
+    bus_stop = models.ForeignKey(BusStop, verbose_name="Остановка посадки", on_delete=models.CASCADE, null=True,
+                                 blank=True)
     quantity_adult = models.PositiveIntegerField(default=0)
     quantity_child = models.PositiveIntegerField(default=0)
     quantity_baggage = models.PositiveIntegerField(default=0)
@@ -33,8 +34,7 @@ class NewTrip(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
     status = models.CharField(choices=TICKET_STATUSES, default=BOOKED, verbose_name="Статус", max_length=50)
-    paid = models.CharField(choices=PAID_STATUSES, default=PAID_BY_CASH,  verbose_name="Оплата", max_length=50)
-    total_cost = models.DecimalField(max_digits=4, decimal_places=2)
+    paid = models.CharField(choices=PAID_STATUSES, default=PAID_BY_CASH, verbose_name="Оплата", max_length=50)
     status_trip = models.BooleanField(default=False, verbose_name="Явка")
 
     class Meta:
@@ -50,6 +50,20 @@ class NewTrip(models.Model):
             self.status = 'Сonfirmed'
 
 
+class TicketTrip(models.Model):
+    trip = models.OneToOneField(NewTrip, verbose_name="Поезка", on_delete=models.CASCADE)
+    rout_data_time = models.CharField(max_length=50, verbose_name="Дата поезки")
+    bus_stop = models.CharField(max_length=50, verbose_name="Остановка посадки")
+    time_stop = models.TimeField('Время посадки', default=timezone.now)
+    total_cost = models.DecimalField(max_digits=4, decimal_places=2, verbose_name='Общая стоиомсть')
+    bus_info = models.CharField(max_length=50, verbose_name="Инфрмация о автобусе")
+
+    class Meta:
+        ordering = ('-rout_data_time',)
+        verbose_name = 'Билет'
+        verbose_name_plural = 'Билеты'
+
+
 
 class TripsUser(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
@@ -60,4 +74,3 @@ class TripsUser(models.Model):
         ordering = ('-user',)
         verbose_name = 'Статиска поездок'
         verbose_name_plural = 'Статиски поездок'
-
