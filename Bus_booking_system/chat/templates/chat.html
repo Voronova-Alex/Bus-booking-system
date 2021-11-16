@@ -1,0 +1,61 @@
+{% extends 'base_chat.html' %}
+{% block content %}
+
+
+    <body>
+        <section class="section">
+            <div class="container">
+                <div class="columns is-multiline">
+                    <div class="column is-6 is-offset-3 mb-6">
+                        <section class="hero is-primary">
+                            <div class="hero-body">
+                                <p class="title">
+                                    Чат-подежка
+                                </p>
+                                <p class="subtitle">
+                                    Поддержим вас
+                                </p>
+                            </div>
+                        </section>
+                    </div>
+
+                    <div class="column is-4 is-offset-4">
+                        <div class="field">
+                            <label>Проблема</label>
+
+                            <div class="control">
+                                <input class="input" type="text" placeholder="Room name" id="room-name-input">
+                            </div>
+                        </div>
+
+                        <div class="field">
+                            <label>Ваше имя</label>
+
+                            <div class="control">
+                                <input class="input" type="text" placeholder="Username" id="username-input">
+                            </div>
+
+                        </div>
+
+                        <div class="field">
+                            <div class="control">
+                                <a class="button is-info" id="room-name-submit">Submit</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <script>
+            document.querySelector('#room-name-input').focus();
+
+            document.querySelector('#room-name-submit').onclick = function(e) {
+                var roomName = document.querySelector('#room-name-input').value;
+                var userName = document.querySelector('#username-input').value;
+
+                window.location.replace(roomName + '/?username=' + userName);
+            };
+        </script>
+    </body>
+{% endblock content %}

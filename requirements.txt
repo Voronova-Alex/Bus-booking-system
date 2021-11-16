@@ -3,3 +3,6 @@ Pillow
 django-crispy-forms
 requests
 six
+channels
+channels_redis
+transliterate

@@ -43,6 +43,8 @@ INSTALLED_APPS = [
     'accounts',
     'six',
     'booking_bus',
+    'chat',
+    'channels'
 ]
 
 MIDDLEWARE = [
@@ -60,7 +62,7 @@ ROOT_URLCONF = 'Bus_booking_system.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': ['Bus_booking_system/templates', 'booking_app/templates', 'accounts/templates'],
+        'DIRS': ['Bus_booking_system/templates', 'booking_app/templates', 'accounts/templates', 'chat/templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -74,6 +76,16 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'Bus_booking_system.wsgi.application'
+ASGI_APPLICATION = 'Bus_booking_system.asgi.application'
+
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        'CONFIG': {
+            'hosts': [('127.0.0.1', 6379)],
+        }
+    }
+}
 
 
 # Database
