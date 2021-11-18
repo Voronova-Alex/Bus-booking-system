@@ -1,0 +1,85 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+    <div class="content-section">
+            {% csrf_token %}
+             <div class="x_content">
+                      <table id="route-datatable" class="table table-striped table-bordered">
+                        <thead>
+                          <tr>
+                            <th></th>
+                            <th>Информация</th>
+                          </tr>
+                        </thead>
+
+                        <tbody>
+
+                                <tr>
+                                    <td>Пассажир</td>
+                                    <td>{{ object.user }}</td>
+                                  </tr>
+                                <tr>
+                                    <td>Контактный телефон</td>
+                                    <td>{{ object.phone }}</td>
+                                  </tr>
+                                <tr>
+                                    <td>Направление</td>
+                                    <td>{{ object.rout_trip}}</td>
+                                  </tr>
+                                <tr>
+                                    <td>Дата-Время поездки</td>
+                                    <td>{{ object.rout_data_time}}</td>
+                                  </tr>
+                                 <tr>
+                                    <td>Остановка посадки</td>
+                                    <td>{{ object.bus_stop}}</td>
+                                  </tr>
+                                 <tr>
+                                    <td>Количество взрослых</td>
+                                    <td>{{ object.quantity_adult}}</td>
+                                  </tr>
+                                <tr>
+                                    <td>Количество детей</td>
+                                    <td>{{ object.quantity_child}}</td>
+                                  </tr>
+                                <tr>
+                                    <td>Количество мест для багажа</td>
+                                    <td>{{ object.quantity_baggage}}</td>
+                                  </tr>
+                                <tr>
+                                    <td>Стоимость полного билета</td>
+                                    <td>{{ object.price_adult}}</td>
+                                  </tr>
+                                <tr>
+                                    <td>Стоимость льготного билета</td>
+                                    <td>{{ object.price_child}}</td>
+                                  </tr>
+                                <tr>
+                                    <td>Стоимость провоза багажа</td>
+                                    <td>{{ object.price_baggage}}</td>
+                                  </tr>
+                                <tr>
+                                    <td>Комментарий к брони</td>
+                                    <td>{{ object.comment}}</td>
+                                  </tr>
+                                <tr>
+                                    <td>Статус брони</td>
+                                    <td>{{ object.status}}</td>
+                                  </tr>
+                                <tr>
+                                    <td>Тип оплаты</td>
+                                    <td>{{ object.paid}}</td>
+                                  </tr>
+
+                        </tbody>
+                      </table>
+
+<a href="{% url 'booking_list' %}" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Чек </a>
+
+                    </div>
+
+            </div>
+
+    </div>
+{% endblock content%}

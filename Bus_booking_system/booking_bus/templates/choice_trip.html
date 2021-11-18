@@ -26,7 +26,8 @@
                                     <td>{{ object.name_start }}</td>
                                     <td>{{ object.name_finish }}</td>
                                     <td  class="text-center">
-                                            <a href="{% url 'choice_trip' %}/{{ object.slug }}" class="btn btn-info btn-xs"> <i class="fa fa-pencil"></i>Выбрать</a>
+
+                                            <a href="{% url 'new_booking' object.slug %}" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Выбрать </a>
 
                                     </td>
                                   </tr>

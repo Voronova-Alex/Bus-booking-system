@@ -26,8 +26,9 @@
                                     <td>{{ object.rout_data_time}}</td>
                                     <td>{{ object.status }}</td>
                                     <td  class="text-center">
-                                            <a href="{% url 'booking_update' object.pk %}" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit </a>
-                                            <a href="{% url 'booking_delete' object.pk %}" class="btn btn-warning btn-xs"><i class="fa fa-remove"></i> Delete </a>
+                                          <a href="{% url 'booking_info' object.pk %}" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Инфо </a>
+                                            <a href="{% url 'booking_update' object.id %}" class="btn btn-warning btn-xs"><i class="fa fa-pencil"></i> Изменить </a>
+                                            <a href="{% url 'booking_delete' object.pk %}" class="btn btn-danger btn-xs"><i class="fa fa-remove"></i> Удалить </a>
                                     </td>
                                   </tr>
                             {% endfor %}

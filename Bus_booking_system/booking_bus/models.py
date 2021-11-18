@@ -3,6 +3,7 @@ from booking_app.models import RoutesTravelDatesTimes, Rout, BusStop
 from django.contrib.auth.models import User
 from datetime import timedelta, datetime
 from django.utils import timezone
+from django.core.validators import MaxValueValidator, MinValueValidator
 
 
 class NewTrip(models.Model):
@@ -21,15 +22,38 @@ class NewTrip(models.Model):
     user = models.CharField(max_length=50, verbose_name="Имя", default="User")
     phone = models.CharField(max_length=50, verbose_name="Контактный телефон")
     rout_trip = models.CharField(max_length=50, verbose_name="Направление")
-    rout_data_time = models.ForeignKey(RoutesTravelDatesTimes, verbose_name="Дата-Время поездки", on_delete=models.CASCADE, )
-    bus_stop = models.ForeignKey(BusStop, verbose_name="Остановка посадки", on_delete=models.CASCADE, null=True,
+    rout_data_time = models.ForeignKey(RoutesTravelDatesTimes, verbose_name="Дата-Время поездки",
+                                       on_delete=models.CASCADE, )
+    bus_stop = models.ForeignKey(BusStop, verbose_name="Остановка посадки", on_delete=models.CASCADE,
+                                 null=True,
                                  blank=True)
-    quantity_adult = models.PositiveIntegerField(default=0)
-    quantity_child = models.PositiveIntegerField(default=0)
-    quantity_baggage = models.PositiveIntegerField(default=0)
-    price_adult = models.DecimalField(max_digits=4, decimal_places=2)
-    price_child = models.DecimalField(max_digits=4, decimal_places=2)
-    price_baggage = models.DecimalField(max_digits=4, decimal_places=2)
+    quantity_adult = models.PositiveIntegerField(
+        default=1,
+        validators=[
+            MaxValueValidator(2),
+            MinValueValidator(0)
+        ],
+        verbose_name="Количество взрослых"
+    )
+    quantity_child = models.PositiveIntegerField(
+        default=0,
+        validators=[
+            MaxValueValidator(5),
+            MinValueValidator(0)
+        ],
+        verbose_name="Количество детей"
+    )
+    quantity_baggage = models.PositiveIntegerField(
+        default=0,
+        validators=[
+            MaxValueValidator(5),
+            MinValueValidator(0)
+        ],
+        verbose_name="Количество мест для багажа"
+    )
+    price_adult = models.DecimalField(max_digits=4, decimal_places=2, verbose_name="Стоимость полного билета")
+    price_child = models.DecimalField(max_digits=4, decimal_places=2, verbose_name="Стоимость льготного билета")
+    price_baggage = models.DecimalField(max_digits=4, decimal_places=2,  verbose_name="Стоимость провоза багажа")
     comment = models.TextField(verbose_name='Комментарий к поездке', null=True, blank=True)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
@@ -69,6 +93,8 @@ class TripsUser(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
     quantity_booked_trip = models.PositiveIntegerField(default=0)
     quantity_cancel_trip = models.PositiveIntegerField(default=0)
+    quantity_default_trip = models.PositiveIntegerField(default=0)
+
 
     class Meta:
         ordering = ('-user',)
