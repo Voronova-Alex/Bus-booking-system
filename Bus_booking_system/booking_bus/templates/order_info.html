@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="content-section">
+            {% csrf_token %}
+             <div class="x_content">
+                      <table id="route-datatable" class="table table-striped table-bordered">
+                        <thead>
+                          <tr>
+                            <th></th>
+                            <th>Чек</th>
+                          </tr>
+                        </thead>
+
+                        <tbody>
+
+                                <tr>
+                                    <td>Пассажир</td>
+
+                                    <td>{{object.trip.user}}</td>
+
+                                  </tr>
+                                <tr>
+                                    <td>Дата поезки</td>
+                                    <td>{{ object.rout_data_time }}</td>
+                                  </tr>
+                                <tr>
+                                    <td>Время отправления от остановки {{ object.bus_stop}}</td>
+                                    <td>{{ object.time_stop}}</td>
+                                  </tr>
+                                 <tr>
+                                    <td>Итоговая стоимость за {{object.trip.quantity_adult}} полный(х) {{object.trip.quantity_child}} льготный(х) билет(а) и {{object.trip.quantity_baggage}} место(а) багаж(а) </td>
+                                    <td>{{ object.total_cost}}</td>
+                                  </tr>
+                                 <tr>
+                                    <td>Автобус</td>
+                                     <td><a href="{% url 'bus_detail' object.bus_slug %}" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i>{{ object.bus_info}}</a></td>
+                                  </tr>
+
+
+                        </tbody>
+                      </table>
+
+<a href="{% url 'booking_list' %}" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Чек </a>
+
+                    </div>
+
+            </div>
+
+    </div>
+{% endblock content%}

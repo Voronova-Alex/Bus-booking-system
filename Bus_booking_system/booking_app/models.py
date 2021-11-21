@@ -45,7 +45,7 @@ class BusDetails(models.Model):
         verbose_name_plural = 'Автобусы'
 
     def __str__(self):
-        return f'{self.bus_model}-{self.bus_number}'
+        return f'{self.bus_model}-{self.bus_number}-{self.bus_colour}'
 
     def get_absolute_url(self):
         return reverse('bus_detail', kwargs={'slug': self.slug})

@@ -1,18 +1,27 @@
 {% extends 'base.html' %}
-{% load crispy_forms_tags %}
-
 {% block content %}
+{% load crispy_forms_tags %}
+{% csrf_token %}
     <div class="content-section">
+
         <form method="post">
-            {% csrf_token %}
+
             <fieldset class="form-group">
                 <legend class="border-bottom mb-4">{{ title}}</legend>
                 <h2>{{ message }}</h2>
             </fieldset>
+            {% if status %}
             <div class="form-group">
-                <button class="btn btn-outline-danger" type="submit">Yes, Delete</button>
-                <a class="btn btn-outline-secondary" href="{% url cancel_url %}">Cancel</a>
+                <a class="btn btn-outline-secondary" href="{% url cancel_url %}">Назад</a>
+            </div>
+            {% else %}
+            <div class="form-group">
+                   {% csrf_token %}
+                <button class="btn btn-outline-danger" type="submit">Да, удалить</button>
+                <a class="btn btn-outline-secondary" href="{% url cancel_url %}">Назад</a>
             </div>
         </form>
+        {% endif %}
     </div>
+
 {% endblock content%}

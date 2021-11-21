@@ -8,11 +8,13 @@
     <p>Привет</p>
     <p>{{user.first_name}} {{user.last_name}}</p>
     <p>Твой email - {{user.email}}</p>
-    <a href="{% url 'profile' user.pk %}">Изменить информацию</a>
+    <a href="{% url 'profile' user.pk %}" class="btn btn-info btn-xs" > <i class="fa fa-pencil"></i>Изменить информацию</a>
 
+    <a href="{% url 'old_trip' user.pk %}" class="btn btn-warning btn-xs"><i class="fa fa-pencil"></i>Совершенные поездки</a>
     <br><br>
-    <a href="{% url 'logout' %}">Выйти</a>
+    <a href="{% url 'logout' %}" class="btn btn-warning btn-xs"><i class="fa fa-pencil"></i>Выйти</a>
     {% else %}
-    <a href="{% url 'login' %}">Войти</a>
+    <a href="{% url 'login' %}" class="btn btn-info btn-xs" > <i class="fa fa-pencil"></i>Войти</a>
     {% endif %}
+
 {% endblock content %}

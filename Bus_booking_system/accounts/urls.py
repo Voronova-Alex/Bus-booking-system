@@ -2,12 +2,15 @@ from django.urls import path
 from django.contrib.auth import views as auth_views
 from django.views.generic import TemplateView
 from .views import SignUpView, ProfileView, ActivateAccount
+from booking_bus.views import OldTripView
 
 urlpatterns = [
     path('home', TemplateView.as_view(template_name='home.html'), name='home'),
     path('signup/', SignUpView.as_view(), name='signup'),
     path('activate/<uidb64>/<token>/', ActivateAccount.as_view(), name='activate'),
     path('profile/<int:pk>/', ProfileView.as_view(), name='profile'),
+    path('profile/<int:pk>/old_trip', OldTripView.as_view(), name='old_trip'),
+
     #New password
     path('change-password/', auth_views.PasswordChangeView.as_view(template_name='change-password.html',
                                                                    success_url='/'),

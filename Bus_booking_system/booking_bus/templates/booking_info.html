@@ -14,16 +14,6 @@
                         </thead>
 
                         <tbody>
-
-                                <tr>
-                                    <td>Пассажир</td>
-                                    <td>{{ object.user }}</td>
-                                  </tr>
-                                <tr>
-                                    <td>Контактный телефон</td>
-                                    <td>{{ object.phone }}</td>
-                                  </tr>
-                                <tr>
                                     <td>Направление</td>
                                     <td>{{ object.rout_trip}}</td>
                                   </tr>
@@ -75,7 +65,7 @@
                         </tbody>
                       </table>
 
-<a href="{% url 'booking_list' %}" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Чек </a>
+<a href="{% url 'order' object.pk %}" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Чек </a>
 
                     </div>
 

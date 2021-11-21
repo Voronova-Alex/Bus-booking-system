@@ -69,9 +69,7 @@ class NewTrip(models.Model):
     def __str__(self):
         return 'NewTrip {}'.format(self.id)
 
-    def status_trip_upgrade(self):
-        if (self.created - timedelta(days=1)) < datetime.combine(self.items.travel_date, self.items.travel_time):
-            self.status = 'Сonfirmed'
+
 
 
 class TicketTrip(models.Model):
@@ -81,6 +79,7 @@ class TicketTrip(models.Model):
     time_stop = models.TimeField('Время посадки', default=timezone.now)
     total_cost = models.DecimalField(max_digits=4, decimal_places=2, verbose_name='Общая стоиомсть')
     bus_info = models.CharField(max_length=50, verbose_name="Инфрмация о автобусе")
+    bus_slug = models.CharField(max_length=100, verbose_name="Ссылка на автобус")
 
     class Meta:
         ordering = ('-rout_data_time',)
@@ -90,13 +89,16 @@ class TicketTrip(models.Model):
 
 
 class TripsUser(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
-    quantity_booked_trip = models.PositiveIntegerField(default=0)
-    quantity_cancel_trip = models.PositiveIntegerField(default=0)
-    quantity_default_trip = models.PositiveIntegerField(default=0)
+    user = models.OneToOneField(User, on_delete=models.CASCADE, null=True, blank=True)
+    quantity_delete_booked_trip = models.PositiveIntegerField(default=0, verbose_name='Количество удаленых броней')
+    quantity_autodelete_trip = models.PositiveIntegerField(default=0, verbose_name='Количество автоматически удаленных броней')
+    quantity_default_trip = models.PositiveIntegerField(default=0, verbose_name='Количество не явок')
 
 
     class Meta:
         ordering = ('-user',)
         verbose_name = 'Статиска поездок'
         verbose_name_plural = 'Статиски поездок'
+
+    def __str__(self):
+        return f'{self.user}'
