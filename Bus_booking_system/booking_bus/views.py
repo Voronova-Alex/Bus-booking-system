@@ -1,6 +1,6 @@
 import datetime
 
-from django.shortcuts import render, reverse, get_object_or_404
+from django.shortcuts import render, reverse, get_object_or_404, redirect
 from django.views.generic import (ListView, DetailView, CreateView, DeleteView, UpdateView)
 from .models import NewTrip, TicketTrip, TripsUser
 from .forms import NewTripForm
@@ -15,6 +15,10 @@ class ChoiceTripListView(LoginRequiredMixin, ListView):
     template_name = 'choice_trip.html'
 
 
+def no_seats(request, pk):
+    return render(request, 'no_seats.html', {'object': pk})
+
+
 class NewTripCreateView(LoginRequiredMixin, CreateView):
     form_class = NewTripForm
     template_name = 'booking_detail.html'
@@ -23,7 +27,6 @@ class NewTripCreateView(LoginRequiredMixin, CreateView):
         kwargs = super(NewTripCreateView, self).get_form_kwargs()
         kwargs['slug'] = self.request.build_absolute_uri().split('/')[-2]
         kwargs['rout'] = Rout.objects.get(slug=kwargs['slug'])
-        print(kwargs)
         return kwargs
 
     def get_success_url(self):
@@ -43,9 +46,6 @@ class NewTripCreateView(LoginRequiredMixin, CreateView):
     def get_absolute_url(self):
         return reverse('booking_info', args=[str(self.id)])
 
-    def get_slug(self):
-        return self.request.build_absolute_uri().split('/')[-2]
-
     def form_valid(self, form):
         self.object = form.save(commit=False)
         slug = self.request.build_absolute_uri().split('/')[-2]
@@ -54,11 +54,16 @@ class NewTripCreateView(LoginRequiredMixin, CreateView):
         self.object.price_adult = BookingPrice.objects.get(price_rout=rout).price_adult
         self.object.price_child = BookingPrice.objects.get(price_rout=rout).price_child
         self.object.price_baggage = BookingPrice.objects.get(price_rout=rout).price_baggage
+        bus_slug = self.object.rout_data_time.bus.slug
 
-
+        bus = BusDetails.objects.get(slug=bus_slug)
+        if bus.number_sites < self.object.quantity_adult + self.object.quantity_child:
+            return redirect('no_seats', BusDetails.objects.get(slug=bus_slug).number_sites)
+        else:
+            bus.number_sites -= self.object.quantity_adult + self.object.quantity_child
+            bus.save()
         if (datetime.now() + timedelta(days=1)) > datetime.combine(self.object.rout_data_time.travel_date,
                                                                    self.object.rout_data_time.travel_time):
-
             self.object.status = 'Подтвердить'
         return super().form_valid(form)
 
@@ -144,6 +149,27 @@ class NewTripUpdateView(LoginRequiredMixin, UpdateView):
         pk_ = self.kwargs.get("pk")
         return NewTrip.objects.get(id=pk_)
 
+    def form_valid(self, form):
+        self.object = form.save(commit=False)
+        pk_ = self.kwargs.get("pk")
+        old_quantity_adult = NewTrip.objects.get(id=pk_).quantity_adult
+        old_quantity_child = NewTrip.objects.get(id=pk_).quantity_child
+        print(old_quantity_adult)
+        print(old_quantity_child)
+        self.object = form.save()
+        print(self.object.quantity_adult)
+        print(self.object.quantity_child)
+        bus_slug = self.object.rout_data_time.bus.slug
+        bus = BusDetails.objects.get(slug=bus_slug)
+        if bus.number_sites + (old_quantity_adult + old_quantity_child) \
+                - (self.object.quantity_adult + self.object.quantity_child) < 0:
+            return redirect('no_seats', BusDetails.objects.get(slug=bus_slug).number_sites)
+        else:
+            bus.number_sites += (old_quantity_adult + old_quantity_child) \
+                                - (self.object.quantity_adult + self.object.quantity_child)
+            bus.save()
+        return super().form_valid(form)
+
     template_name = 'booking_detail.html'
     fields = ['phone', 'quantity_adult', 'quantity_child', 'quantity_baggage', 'comment', 'status', 'paid']
     exclude = ['many_to_many_field']
@@ -181,4 +207,8 @@ class NewTripDeleteView(LoginRequiredMixin, DeleteView):
                                       quantity_autodelete_trip=0,
                                       quantity_default_trip=0)
                 trip_user.save()
+            bus_slug = trip.rout_data_time.bus.slug
+            bus = BusDetails.objects.get(slug=bus_slug)
+            bus.number_sites += trip.quantity_adult+trip.quantity_child
+            bus.save()
         return context

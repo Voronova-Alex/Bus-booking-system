@@ -30,8 +30,8 @@ class NewTrip(models.Model):
     quantity_adult = models.PositiveIntegerField(
         default=1,
         validators=[
-            MaxValueValidator(2),
-            MinValueValidator(0)
+            MaxValueValidator(3),
+            MinValueValidator(1)
         ],
         verbose_name="Количество взрослых"
     )

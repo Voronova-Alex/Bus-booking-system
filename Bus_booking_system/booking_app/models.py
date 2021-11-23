@@ -23,7 +23,7 @@ class BusDetails(models.Model):
     bus_colour = models.CharField(max_length=25, choices=CHOICES, verbose_name='Цвет автобуса')
     bus_photo = models.ImageField(upload_to='media/bus/', verbose_name='Фотография автобуса')
     number_sites = models.PositiveIntegerField(
-        default=4,
+        default=15,
         validators=[
             MaxValueValidator(50),
             MinValueValidator(15)
