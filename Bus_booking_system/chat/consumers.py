@@ -65,5 +65,9 @@ class ChatConsumer(AsyncWebsocketConsumer):
     def save_message(self, username, room, message):
 
         room_url = f'http://127.0.0.1:8000/{room}/?username=admin'
-        room = translit(room, "ru")
+
+        room_ru = translit(room, "ru")
+        a = 'ь'.join(room_ru.split('23'))
+        b = 'ъ'.join(a.split('32'))
+        room = ' '.join(b.split('-'))
         Message.objects.create(username=username, room=room, content=message, room_url=room_url)

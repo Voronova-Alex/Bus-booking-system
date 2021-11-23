@@ -39,7 +39,8 @@
 
                         <div class="field">
                             <div class="control">
-                                <a class="button is-info" id="room-name-submit">Submit</a>
+                                <br><br>
+                                <a class="btn btn-success" id="room-name-submit">Submit</a>
                             </div>
                         </div>
                     </div>
@@ -53,9 +54,19 @@
             document.querySelector('#room-name-submit').onclick = function(e) {
                 var roomName = document.querySelector('#room-name-input').value;
                 var userName = document.querySelector('#username-input').value;
+                var a = {" ":"-","Ё":"YO","Й":"I","Ц":"TS","У":"U","К":"K","Е":"E","Н":"N","Г":"G","Ш":"SH","Щ":"SCH","З":"Z","Х":"H","Ъ":"32","ё":"yo","й":"i","ц":"ts","у":"u","к":"k","е":"e","н":"n","г":"g","ш":"sh","щ":"sch","з":"z","х":"h","ъ":"32","Ф":"F","Ы":"I","В":"V","А":"a","П":"P","Р":"R","О":"O","Л":"L","Д":"D","Ж":"ZH","Э":"E","ф":"f","ы":"i","в":"v","а":"a","п":"p","р":"r","о":"o","л":"l","д":"d","ж":"zh","э":"e","Я":"Ya","Ч":"CH","С":"S","М":"M","И":"I","Т":"T","Ь":"23","Б":"B","Ю":"YU","я":"ya","ч":"ch","с":"s","м":"m","и":"i","т":"t","ь":"23","б":"b","ю":"yu"};
+
+                function transliterate(roomName){
+                    return roomName.split('').map(function (char) {
+                        return a[char] || char;
+                    }).join("");
+
+                }
+                roomName = transliterate(roomName)
+
 
                 window.location.replace(roomName + '/?username=' + userName);
-            };
+            };3
         </script>
     </body>
 {% endblock content %}

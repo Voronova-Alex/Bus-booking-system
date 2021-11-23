@@ -3,12 +3,12 @@
 {% block title %}Авторизироваться{% endblock title %}
 
 {% block content %} 
-    <h2>Sign Page</h2>
+    <h2>Заргестрироваться</h2>
     <form method="post">
         {% csrf_token %}
         {{ form.as_p }}
-        <button type="submit">Заргестрироваться</button>
+        <button type="submit" class="btn btn-info btn-xs">Заргестрироваться</button>
         <br><br>
-        <a href="{% url 'home-page' %}">Home</a>
+        <a href="{% url 'home-page' %}" class="btn btn-warning btn-xs">Назад</a>
     </form>
 {% endblock content %}

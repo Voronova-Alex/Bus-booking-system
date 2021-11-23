@@ -14,6 +14,6 @@ class Message(models.Model):
         return f'{self.username}-{self.room}'
 
     class Meta:
-        ordering = ('date_added',)
+        ordering = ('-date_added',)
 
 

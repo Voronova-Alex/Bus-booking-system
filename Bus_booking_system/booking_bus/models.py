@@ -7,17 +7,17 @@ from django.core.validators import MaxValueValidator, MinValueValidator
 
 
 class NewTrip(models.Model):
-    BOOKED = 'Booked'
-    CONFIRMED = 'Сonfirmed'
+    BOOKED = 'Забронировать'
+    CONFIRMED = 'Подтвердить'
 
-    TICKET_STATUSES = ((BOOKED, 'Booked'),
-                       (CONFIRMED, 'Сonfirmed'),)
+    TICKET_STATUSES = ((BOOKED, 'Забронировать'),
+                       (CONFIRMED, 'Подтвердить'),)
 
-    PAID_BY_CARD = 'Card'
-    PAID_BY_CASH = 'Cash'
+    PAID_BY_CARD = 'По карте'
+    PAID_BY_CASH = 'Наличными'
 
-    PAID_STATUSES = ((PAID_BY_CARD, 'Card'),
-                     (PAID_BY_CASH, 'Cash'),)
+    PAID_STATUSES = ((PAID_BY_CARD, 'По карте'),
+                     (PAID_BY_CASH, 'Наличными'),)
 
     user = models.CharField(max_length=50, verbose_name="Имя", default="User")
     phone = models.CharField(max_length=50, verbose_name="Контактный телефон")
