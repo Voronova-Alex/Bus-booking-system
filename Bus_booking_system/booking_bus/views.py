@@ -1,9 +1,9 @@
 import datetime
 
-from django.shortcuts import render, reverse, get_object_or_404, redirect
+from django.shortcuts import render, reverse, redirect
 from django.views.generic import (ListView, DetailView, CreateView, DeleteView, UpdateView)
-from .models import NewTrip, TicketTrip, TripsUser
-from .forms import NewTripForm
+from .models import NewTrip, TicketTrip, TripsUser, Reviews
+from .forms import NewTripForm, ReviewsForm
 from booking_app.models import Rout, BookingPrice, BusStop, RoutesTravelDatesTimes, BusDetails
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
@@ -17,6 +17,13 @@ class ChoiceTripListView(LoginRequiredMixin, ListView):
 
 def no_seats(request, pk):
     return render(request, 'no_seats.html', {'object': pk})
+
+
+def review_done(request):
+    return render(request, 'review_done.html')
+
+def update_error(request):
+    return render(request, 'error.html')
 
 
 class NewTripCreateView(LoginRequiredMixin, CreateView):
@@ -96,8 +103,7 @@ class OldTripView(LoginRequiredMixin, ListView):
 
 
 class NewTripInfoView(LoginRequiredMixin, DetailView):
-    model = NewTrip
-
+    form = ReviewsForm
     template_name = 'booking_info.html'
 
     def get_object(self):
@@ -145,20 +151,17 @@ class NewTripInfoView(LoginRequiredMixin, DetailView):
 class NewTripUpdateView(LoginRequiredMixin, UpdateView):
     Model = NewTrip
 
-    def get_object(self):
-        pk_ = self.kwargs.get("pk")
-        return NewTrip.objects.get(id=pk_)
+    def get_queryset(self):
+        return NewTrip.objects.filter(user=self.request.user)
 
     def form_valid(self, form):
         self.object = form.save(commit=False)
         pk_ = self.kwargs.get("pk")
         old_quantity_adult = NewTrip.objects.get(id=pk_).quantity_adult
         old_quantity_child = NewTrip.objects.get(id=pk_).quantity_child
-        print(old_quantity_adult)
-        print(old_quantity_child)
+        if NewTrip.objects.get(id=pk_).status == 'Подтвердить':
+            return redirect('update_error')
         self.object = form.save()
-        print(self.object.quantity_adult)
-        print(self.object.quantity_child)
         bus_slug = self.object.rout_data_time.bus.slug
         bus = BusDetails.objects.get(slug=bus_slug)
         if bus.number_sites + (old_quantity_adult + old_quantity_child) \
@@ -212,3 +215,25 @@ class NewTripDeleteView(LoginRequiredMixin, DeleteView):
             bus.number_sites += trip.quantity_adult+trip.quantity_child
             bus.save()
         return context
+
+class ReviewsCreateView(LoginRequiredMixin, CreateView):
+    form_class = ReviewsForm
+    template_name = 'reviews.html'
+    success_url = reverse_lazy('home')
+
+    def form_valid(self, form):
+        self.object = form.save(commit=False)
+        pk_ = self.kwargs.get('pk')
+        slug=[]
+        slug_bus = RoutesTravelDatesTimes.objects.filter(travel_date=(datetime.now() + timedelta(days=1)))
+        for i in slug_bus:
+            slug.append(i.bus.slug)
+        print(slug)
+
+        if Reviews.objects.filter(trip_id=pk_).exists():
+            return redirect('review_done')
+        else:
+            self.object.user = self.request.user
+            self.object.trip = NewTrip.objects.get(id=pk_)
+            self.object.bus_slug = NewTrip.objects.get(id=pk_).rout_data_time.bus.slug
+            return super().form_valid(form)

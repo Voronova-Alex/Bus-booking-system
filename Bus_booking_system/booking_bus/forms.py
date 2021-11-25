@@ -1,4 +1,4 @@
-from .models import NewTrip
+from .models import NewTrip, Reviews
 from booking_app.models import Rout, RoutesTravelDatesTimes, BookingPrice, BusStop
 from django import forms
 from datetime import datetime
@@ -21,19 +21,7 @@ class NewTripForm(forms.ModelForm):
                   'price_child', 'price_baggage', 'comment', 'status', 'paid']
 
 
-"""
-
-class UpdateTripForm(forms.ModelForm):
-
-    def __init__(self, *args, **kwargs):
-        name_start = kwargs.pop('rout').split('-')[0]
-        super().__init__(*args, **kwargs)
-        super(UpdateTripForm, self).__init__(*args, **kwargs)
-        self.fields['bus_stop'].queryset = BusStop.objects.filter(name_start__slug__contains=name_start)
-
+class ReviewsForm(forms.ModelForm):
     class Meta:
-        model = NewTrip
-        fields = ['phone', 'rout_trip', 'bus_stop', 'quantity_adult',
-                  'quantity_child', 'quantity_baggage', 'comment', 'status', 'paid']
-
-"""
+        model = Reviews
+        fields = ['bus_rating', 'comment']

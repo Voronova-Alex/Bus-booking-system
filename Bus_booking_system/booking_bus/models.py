@@ -1,7 +1,6 @@
 from django.db import models
 from booking_app.models import RoutesTravelDatesTimes, Rout, BusStop
 from django.contrib.auth.models import User
-from datetime import timedelta, datetime
 from django.utils import timezone
 from django.core.validators import MaxValueValidator, MinValueValidator
 
@@ -53,7 +52,7 @@ class NewTrip(models.Model):
     )
     price_adult = models.DecimalField(max_digits=4, decimal_places=2, verbose_name="Стоимость полного билета")
     price_child = models.DecimalField(max_digits=4, decimal_places=2, verbose_name="Стоимость льготного билета")
-    price_baggage = models.DecimalField(max_digits=4, decimal_places=2,  verbose_name="Стоимость провоза багажа")
+    price_baggage = models.DecimalField(max_digits=4, decimal_places=2, verbose_name="Стоимость провоза багажа")
     comment = models.TextField(verbose_name='Комментарий к поездке', null=True, blank=True)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
@@ -68,8 +67,6 @@ class NewTrip(models.Model):
 
     def __str__(self):
         return 'NewTrip {}'.format(self.id)
-
-
 
 
 class TicketTrip(models.Model):
@@ -87,13 +84,12 @@ class TicketTrip(models.Model):
         verbose_name_plural = 'Билеты'
 
 
-
 class TripsUser(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, null=True, blank=True)
     quantity_delete_booked_trip = models.PositiveIntegerField(default=0, verbose_name='Количество удаленых броней')
-    quantity_autodelete_trip = models.PositiveIntegerField(default=0, verbose_name='Количество автоматически удаленных броней')
+    quantity_autodelete_trip = models.PositiveIntegerField(default=0,
+                                                           verbose_name='Количество автоматически удаленных броней')
     quantity_default_trip = models.PositiveIntegerField(default=0, verbose_name='Количество не явок')
-
 
     class Meta:
         ordering = ('-user',)
@@ -102,3 +98,27 @@ class TripsUser(models.Model):
 
     def __str__(self):
         return f'{self.user}'
+
+
+class Reviews(models.Model):
+    user = models.CharField(max_length=50, verbose_name="Имя", default="User")
+    created = models.DateTimeField(auto_now_add=True)
+    trip = models.OneToOneField(NewTrip, verbose_name="Поезка", on_delete=models.CASCADE)
+    bus_slug = models.CharField(max_length=100, verbose_name="Автобус")
+    comment = models.TextField(verbose_name='Комментарий к поездке', null=True, blank=True)
+    bus_rating = models.PositiveIntegerField(
+        default=5,
+        validators=[
+            MaxValueValidator(5),
+            MinValueValidator(1)
+        ],
+        verbose_name='Оценка'
+    )
+
+    class Meta:
+        ordering = ('-created',)
+        verbose_name = 'Отзыв'
+        verbose_name_plural = 'Отзывы'
+
+    def __str__(self):
+        return f'{self.bus_slug} оценка {self.bus_rating}'

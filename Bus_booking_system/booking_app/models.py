@@ -50,10 +50,10 @@ class BusDetails(models.Model):
     def get_absolute_url(self):
         return reverse('bus_detail', kwargs={'slug': self.slug})
 
+
 class BusStop(models.Model):
     bus_stop = models.CharField(max_length=25, verbose_name='Остановка')
     delta_time = models.TimeField(default=time(00, 00), verbose_name='Время в пути')
-
 
     def __str__(self):
         return f'{self.bus_stop}'
@@ -63,14 +63,11 @@ class BusStop(models.Model):
         verbose_name_plural = 'Остановки'
 
 
-
-
 class Rout(models.Model):
     name_start = models.CharField(max_length=25, verbose_name='Начало маршрута')
     name_finish = models.CharField(max_length=25, verbose_name='Конец маршрута')
     slug = models.SlugField(max_length=25, unique=True, verbose_name='SLUG')
     bus_stops = models.ManyToManyField(BusStop, verbose_name='Остановка')
-
 
     def __str__(self):
         return f'{self.name_start}-{self.name_finish}'
@@ -98,7 +95,6 @@ class BookingPrice(models.Model):
 
 
 class RoutesTravelDatesTimes(models.Model):
-
     rout = models.ForeignKey(Rout, on_delete=models.CASCADE)
     bus = models.ForeignKey(BusDetails, on_delete=models.CASCADE)
     travel_date = models.DateField(default=timezone.now, verbose_name='Дата отправления')
