@@ -44,7 +44,8 @@ INSTALLED_APPS = [
     'six',
     'booking_bus',
     'chat',
-    'channels'
+    'channels',
+    'rest_framework'
 ]
 
 MIDDLEWARE = [

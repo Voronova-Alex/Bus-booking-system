@@ -2,7 +2,6 @@ from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 from django.views.generic import View, UpdateView
 from .forms import SignUpForm, ProfileForm
-
 from django.contrib import messages
 from django.contrib.sites.shortcuts import get_current_site
 from django.utils.encoding import force_bytes
@@ -14,7 +13,7 @@ from django.utils.encoding import force_text
 from django.utils.http import urlsafe_base64_decode
 from .tokens import account_activation_token
 
-# Sign Up View
+
 class SignUpView(View):
     form_class = SignUpForm
     template_name = 'signup.html'
@@ -26,9 +25,8 @@ class SignUpView(View):
     def post(self, request, *args, **kwargs):
         form = self.form_class(request.POST)
         if form.is_valid():
-
             user = form.save(commit=False)
-            user.is_active = False # Deactivate account till it is confirmed
+            user.is_active = False  # Deactivate account till it is confirmed
             user.save()
 
             current_site = get_current_site(request)
@@ -41,11 +39,13 @@ class SignUpView(View):
             })
             user.email_user(subject, message)
 
-            messages.success(request, ('Пожалуйста, подтвердите свой адрес электронной почты, чтобы завершить регистрацию.'))
+            messages.success(request,
+                             ('Пожалуйста, подтвердите свой адрес электронной почты, чтобы завершить регистрацию.'))
 
             return redirect('home')
 
         return render(request, self.template_name, {'form': form})
+
 
 class ActivateAccount(View):
 
@@ -64,7 +64,8 @@ class ActivateAccount(View):
             messages.success(request, ('Ваша учетная запись подтверждена.'))
             return redirect('home')
         else:
-            messages.warning(request, ('Ссылка для подтверждения недействительна, возможно, потому, что она уже использовалась.'))
+            messages.warning(request, (
+                'Ссылка для подтверждения недействительна, возможно, потому, что она уже использовалась.'))
             return redirect('home')
 
 

@@ -50,7 +50,6 @@ class BusDetails(models.Model):
     def get_absolute_url(self):
         return reverse('bus_detail', kwargs={'slug': self.slug})
 
-
 class BusStop(models.Model):
     bus_stop = models.CharField(max_length=25, verbose_name='Остановка')
     delta_time = models.TimeField(default=time(00, 00), verbose_name='Время в пути')

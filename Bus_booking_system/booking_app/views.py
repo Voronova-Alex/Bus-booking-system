@@ -1,6 +1,6 @@
-from django.shortcuts import render, reverse
-from django.views.generic import (ListView, DetailView, CreateView, DeleteView, UpdateView)
-from .models import Rout, RoutesTravelDatesTimes, BookingPrice, BusDetails, BusStop
+from django.shortcuts import render
+from django.views.generic import (ListView, DetailView)
+from .models import Rout, BusDetails
 
 def home(request):
     return render(request, 'index.html')
