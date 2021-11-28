@@ -1,0 +1,46 @@
+version: "3.3"
+
+services:
+  db:
+    image: postgres:latest
+    container_name: django-db
+    restart: always
+    env_file:
+      - .env
+    environment:
+      - POSTGRES_DB=${DB_NAME}
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASS}
+      - POSTGRES_HOST=${DB_HOPOSTGRES_HOST_AUTH_METHOD=trust
+    ports:
+      - "5432:5432"
+
+  redis-server:
+    image: "redis:5"
+    command: redis-server
+    ports:
+      - "6379:6379"
+
+  web:
+    build: .
+    container_name: django-backend
+    volumes:
+      - .:/code
+    env_file:
+      - .env
+    environment:
+      - POSTGRES_DB=${DB_NAME}
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASS}
+      - POSTGRES_HOST=db
+      - POSTGRES_HOST_AUTH_METHOD=trust
+      - DB_ENGINE=${DB_ENGINE}
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+      - redis-server
+    links:
+      - db:db
+      - redis-server:redis-server
+

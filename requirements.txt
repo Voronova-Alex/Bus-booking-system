@@ -6,3 +6,5 @@ six
 channels
 channels_redis
 djangorestframework
+transliterate
+psycopg2-binary
