@@ -3,8 +3,6 @@ from transliterate import translit
 from channels.generic.websocket import AsyncWebsocketConsumer
 from asgiref.sync import sync_to_async
 
-
-
 from .models import Message
 
 
@@ -14,7 +12,6 @@ class ChatConsumer(AsyncWebsocketConsumer):
 
         self.room_group_name = 'chat_%s' % self.room_name
 
-        # Join room
         await self.channel_layer.group_add(
             self.room_group_name,
             self.channel_name
@@ -23,13 +20,11 @@ class ChatConsumer(AsyncWebsocketConsumer):
         await self.accept()
 
     async def disconnect(self, close_code):
-        # Leave room
         await self.channel_layer.group_discard(
             self.room_group_name,
             self.channel_name
         )
 
-    # Receive message from web socket
     async def receive(self, text_data):
         data = json.loads(text_data)
         message = data['message']
@@ -48,22 +43,17 @@ class ChatConsumer(AsyncWebsocketConsumer):
             }
         )
 
-    # Receive message from room group
     async def chat_message(self, event):
         message = event['message']
         username = event['username']
 
-        # Send message to WebSocket
         await self.send(text_data=json.dumps({
             'message': message,
             'username': username
         }))
 
-
     @sync_to_async
-
     def save_message(self, username, room, message):
-
         room_url = f'http://127.0.0.1:8000/{room}/?username=admin'
 
         room_ru = translit(room, "ru")

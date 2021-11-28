@@ -26,7 +26,7 @@ class SignUpView(View):
         form = self.form_class(request.POST)
         if form.is_valid():
             user = form.save(commit=False)
-            user.is_active = False  # Deactivate account till it is confirmed
+            user.is_active = False
             user.save()
 
             current_site = get_current_site(request)
