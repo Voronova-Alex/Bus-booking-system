@@ -7,5 +7,5 @@ RUN pip install --upgrade pip
 RUN pip install -r /code/requirements.txt
 COPY . /code/
 WORKDIR /code/Bus_booking_system
-CMD python manage.py migratedocker-compose exec [containerID] ./app/console migrations:migrate --no-interaction
+CMD python manage.py migrate
 CMD python manage.py runserver 0.0.0.0:8000
