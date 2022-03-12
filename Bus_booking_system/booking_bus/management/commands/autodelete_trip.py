@@ -23,10 +23,8 @@ class Command(BaseCommand):
 
         for i in rout_data_time_list:
             user_query = NewTrip.objects.filter(rout_data_time=i, status='Забронировать')
-            print(user_query)
             for i in user_query:
                 user_list.append(i.user)
-            print(user_list)
         for i in rout_data_time_list:
             NewTrip.objects.filter(rout_data_time=i, status='Забронировать').delete()
         for user in user_list:

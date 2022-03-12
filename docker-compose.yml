@@ -16,11 +16,11 @@ services:
     ports:
       - "5432:5432"
 
-  redis-server:
-    image: "redis:5"
-    command: redis-server
+  redis:
+    image: redis:latest
     ports:
       - "6379:6379"
+
 
   web:
     build: .
@@ -40,8 +40,8 @@ services:
       - "8000:8000"
     depends_on:
       - db
-      - redis-server
+      - redis
     links:
       - db:db
-      - redis-server:redis-server
+      - redis:redis
 

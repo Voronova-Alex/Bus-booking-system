@@ -54,7 +54,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
 
     @sync_to_async
     def save_message(self, username, room, message):
-        room_url = f'http://127.0.0.1:8000/{room}/?username=admin'
+        room_url = f'http://localhost:8000/{room}/?username=admin'
 
         room_ru = translit(room, "ru")
         a = 'ь'.join(room_ru.split('23'))
